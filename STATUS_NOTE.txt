@@ -1,0 +1,1 @@
+Status laundry menggunakan enum: PICKUP, PROSES, ANTAR

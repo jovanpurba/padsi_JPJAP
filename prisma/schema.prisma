@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  KURIR
+}
+
+enum LaundryStatus {
+  PICKUP
+  PROSES
+  ANTAR
+}
+
+model User {
+  id       String @id @default(uuid())
+  username String @unique
+  password String
+  role     Role   @default(KURIR)
+
+  jadwals        Jadwal[]        @relation("KurirJadwal")
+  notifications  Notification[]
+}
+
+model Pelanggan {
+  id      String @id @default(uuid())
+  nama    String
+  alamat  String
+  notelp  String
+
+  jadwals Jadwal[]
+}
+
+model Jadwal {
+  id          String @id @default(uuid())
+  tanggal     DateTime
+  status      LaundryStatus @default(PICKUP)
+
+  pelangganId String
+  pelanggan   Pelanggan @relation(fields: [pelangganId], references: [id])
+
+  kurirId     String?
+  kurir       User? @relation("KurirJadwal", fields: [kurirId], references: [id])
+
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  message   String
+  read      Boolean  @default(false)
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+}
