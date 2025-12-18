@@ -1,7 +1,0 @@
-{
-  "buildCommand": "npm ci --prefer-offline --no-audit && prisma generate && next build",
-  "installCommand": "npm ci --prefer-offline --no-audit",
-  "env": {
-    "DATABASE_URL": "@database_url"
-  }
-}
